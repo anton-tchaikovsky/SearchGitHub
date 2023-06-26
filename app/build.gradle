@@ -23,6 +23,9 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        debug {
+            versionNameSuffix "-debug"
+        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
@@ -35,6 +38,17 @@ android {
     testOptions {
         unitTests {
             includeAndroidResources = true
+        }
+    }
+    flavorDimensions 'data_type'
+    productFlavors {
+        real {
+            dimension 'data_type'
+            versionNameSuffix '.real'
+        }
+        fake {
+            dimension 'data_type'
+            versionNameSuffix '.fake'
         }
     }
 
