@@ -6,6 +6,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
+import android.widget.TextView
 import android.widget.TextView.OnEditorActionListener
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -20,6 +21,7 @@ import com.example.searchgithub.repository.IGitHubRepository
 import com.example.searchgithub.view.details.DetailsActivity
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.Locale
 
 class MainActivity : AppCompatActivity(), ViewSearchContract {
 
@@ -96,6 +98,12 @@ class MainActivity : AppCompatActivity(), ViewSearchContract {
         searchResults: List<SearchResult>,
         totalCount: Int
     ) {
+        findViewById<TextView>(R.id.totalCountTextView).apply {
+            visibility = View.VISIBLE
+            text = String.format(
+                Locale.getDefault(), getString(R.string.results_count),
+                totalCount)
+        }
         this.totalCount = totalCount
         searchResultAdapter.updateResults(searchResults)
     }
