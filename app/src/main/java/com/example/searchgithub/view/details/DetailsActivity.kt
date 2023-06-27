@@ -6,17 +6,21 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.example.searchgithub.App
 import com.example.searchgithub.R
 import com.example.searchgithub.presenter.details.DetailsPresenter
 import com.example.searchgithub.presenter.details.PresenterDetailsContract
 import java.util.*
+import javax.inject.Inject
 
 class DetailsActivity : AppCompatActivity(), ViewDetailsContract {
 
-    private lateinit var presenter: PresenterDetailsContract
+    @Inject
+    lateinit var presenter: PresenterDetailsContract
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        App.instance.appComponent.inject(this)
         setContentView(R.layout.activity_details)
         setUI()
         presenter = extractPresenter()

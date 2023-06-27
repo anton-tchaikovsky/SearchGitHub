@@ -6,8 +6,9 @@ import com.example.searchgithub.repository.GitHubRepositoryCallback
 import com.example.searchgithub.repository.IGitHubRepository
 import com.example.searchgithub.view.search.ViewSearchContract
 import retrofit2.Response
+import javax.inject.Inject
 
-internal class SearchPresenter internal constructor(
+class SearchPresenter @Inject internal constructor(
     private val repository: IGitHubRepository
 ) : PresenterSearchContract, GitHubRepositoryCallback {
 

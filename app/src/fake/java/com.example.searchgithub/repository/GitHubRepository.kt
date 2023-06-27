@@ -1,9 +1,15 @@
 package com.example.searchgithub.repository
 
+import com.example.searchgithub.App
 import com.example.searchgithub.model.SearchResponse
 import retrofit2.Response
+import javax.inject.Inject
 
-internal class GitHubRepository(@Suppress("unused") private val gitHubApi: GitHubApi) : IGitHubRepository {
+class GitHubRepository @Inject constructor(@Suppress("unused") private val gitHubApi: GitHubApi) : IGitHubRepository {
+
+   init {
+       App.instance.appComponent.inject(this)
+   }
 
     override fun searchGithub(
         query: String,

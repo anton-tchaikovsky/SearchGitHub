@@ -11,26 +11,24 @@ import android.widget.TextView.OnEditorActionListener
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.example.searchgithub.App
 import com.example.searchgithub.R
 import com.example.searchgithub.model.SearchResult
 import com.example.searchgithub.presenter.search.PresenterSearchContract
-import com.example.searchgithub.presenter.search.SearchPresenter
-import com.example.searchgithub.repository.GitHubApi
-import com.example.searchgithub.repository.GitHubRepository
-import com.example.searchgithub.repository.IGitHubRepository
 import com.example.searchgithub.view.details.DetailsActivity
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.util.Locale
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), ViewSearchContract {
 
     private val searchResultAdapter = SearchResultAdapter()
-    private lateinit var presenter: PresenterSearchContract
+    @Inject
+    lateinit var presenter: PresenterSearchContract
     private var totalCount: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        App.instance.appComponent.inject(this)
         setContentView(R.layout.activity_main)
         setUI()
         presenter = extractPresenter()
@@ -39,9 +37,7 @@ class MainActivity : AppCompatActivity(), ViewSearchContract {
 
     @Suppress("DEPRECATION")
     private fun extractPresenter(): PresenterSearchContract =
-        lastCustomNonConfigurationInstance as? PresenterSearchContract ?: SearchPresenter(
-            createRepository()
-        )
+        lastCustomNonConfigurationInstance as? PresenterSearchContract ?: presenter
 
     @Deprecated("Deprecated in Java")
     override fun onRetainCustomNonConfigurationInstance(): PresenterSearchContract {
@@ -83,17 +79,6 @@ class MainActivity : AppCompatActivity(), ViewSearchContract {
         })
     }
 
-    private fun createRepository(): IGitHubRepository {
-        return GitHubRepository(createRetrofit().create(GitHubApi::class.java))
-    }
-
-    private fun createRetrofit(): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }
-
     override fun displaySearchResults(
         searchResults: List<SearchResult>,
         totalCount: Int
@@ -131,7 +116,5 @@ class MainActivity : AppCompatActivity(), ViewSearchContract {
         super.onDestroy()
     }
 
-    companion object {
-        const val BASE_URL = "https://api.github.com"
-    }
+
 }
