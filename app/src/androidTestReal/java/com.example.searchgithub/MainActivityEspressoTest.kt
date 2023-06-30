@@ -45,7 +45,6 @@ class MainActivityEspressoTest {
 
     private lateinit var undefinedError: String
 
-
     private lateinit var scenario: ActivityScenario<MainActivity>
 
     @Before
