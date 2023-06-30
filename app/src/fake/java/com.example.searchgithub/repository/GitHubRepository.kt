@@ -7,10 +7,6 @@ import javax.inject.Inject
 
 class GitHubRepository @Inject constructor(@Suppress("unused") private val gitHubApi: GitHubApi) : IGitHubRepository {
 
-   init {
-       App.instance.appComponent.inject(this)
-   }
-
     override fun searchGithub(
         query: String,
         callback: GitHubRepositoryCallback

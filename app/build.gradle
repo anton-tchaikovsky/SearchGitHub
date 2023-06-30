@@ -40,15 +40,26 @@ android {
             includeAndroidResources = true
         }
     }
-    flavorDimensions 'data_type'
+//    flavorDimensions 'data_type'
+
+    buildFeatures {
+        buildConfig = true
+    }
+    kapt {
+        generateStubs = true
+    }
+
+    flavorDimensions "default"
     productFlavors {
         real {
-            dimension 'data_type'
-            versionNameSuffix '.real'
+            applicationIdSuffix ".real"
+            versionNameSuffix "-real"
+            buildConfigField "String", "TYPE", '"REAL"'
         }
         fake {
-            dimension 'data_type'
-            versionNameSuffix '.fake'
+            applicationIdSuffix ".fake"
+            versionNameSuffix "-fake"
+            buildConfigField "String", "TYPE", '"FAKE"'
         }
     }
 
