@@ -16,12 +16,14 @@ import com.example.searchgithub.R
 import com.example.searchgithub.model.SearchResult
 import com.example.searchgithub.presenter.search.PresenterSearchContract
 import com.example.searchgithub.view.details.DetailsActivity
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.util.Locale
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), ViewSearchContract {
 
     private val searchResultAdapter = SearchResultAdapter()
+
     @Inject
     lateinit var presenter: PresenterSearchContract
     private var totalCount: Int = 0
@@ -48,8 +50,15 @@ class MainActivity : AppCompatActivity(), ViewSearchContract {
         findViewById<Button>(R.id.toDetailsActivityButton).setOnClickListener {
             startActivity(DetailsActivity.getIntent(this, totalCount))
         }
+        setSearchFAB()
         setQueryListener()
         setRecyclerView()
+    }
+
+    private fun setSearchFAB() {
+        findViewById<FloatingActionButton>(R.id.searchFloatingActionButton).setOnClickListener {
+            queryProcessing()
+        }
     }
 
     private fun setRecyclerView() {
@@ -62,21 +71,25 @@ class MainActivity : AppCompatActivity(), ViewSearchContract {
     private fun setQueryListener() {
         findViewById<EditText>(R.id.searchEditText).setOnEditorActionListener(OnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                val query = findViewById<EditText>(R.id.searchEditText).text.toString()
-                if (query.isNotBlank()) {
-                    presenter.searchGitHub(query)
-                    return@OnEditorActionListener true
-                } else {
-                    Toast.makeText(
-                        this@MainActivity,
-                        getString(R.string.enter_search_word),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    return@OnEditorActionListener false
-                }
+                return@OnEditorActionListener queryProcessing()
             }
             false
         })
+    }
+
+    private fun queryProcessing(): Boolean {
+        val query = findViewById<EditText>(R.id.searchEditText).text.toString()
+        return if (query.isNotBlank()) {
+            presenter.searchGitHub(query)
+            true
+        } else {
+            Toast.makeText(
+                this@MainActivity,
+                getString(R.string.enter_search_word),
+                Toast.LENGTH_SHORT
+            ).show()
+            false
+        }
     }
 
     override fun displaySearchResults(
@@ -87,7 +100,8 @@ class MainActivity : AppCompatActivity(), ViewSearchContract {
             visibility = View.VISIBLE
             text = String.format(
                 Locale.getDefault(), getString(R.string.results_count),
-                totalCount)
+                totalCount
+            )
         }
         this.totalCount = totalCount
         searchResultAdapter.updateResults(searchResults)

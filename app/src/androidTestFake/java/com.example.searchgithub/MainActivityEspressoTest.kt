@@ -30,6 +30,8 @@ class MainActivityEspressoTest {
 
     private lateinit var searchEditText: ViewInteraction
 
+    private lateinit var searchFAB: ViewInteraction
+
     private lateinit var toDetailsActivityButton: ViewInteraction
 
     private lateinit var progressBar: ViewInteraction
@@ -54,6 +56,7 @@ class MainActivityEspressoTest {
             searchEditText = onView(withId(R.id.searchEditText))
             toDetailsActivityButton = onView(withId(R.id.toDetailsActivityButton))
             progressBar = onView(withId(R.id.progressBar))
+            searchFAB = onView(withId(R.id.searchFloatingActionButton))
         }
     }
 
@@ -64,6 +67,7 @@ class MainActivityEspressoTest {
             assertNotNull(it)
         }
         searchEditText.check(matches(isCompletelyDisplayed())).check(matches(isClickable()))
+        searchFAB.check(matches(isCompletelyDisplayed())).check(matches(isClickable()))
         toDetailsActivityButton.check(matches(isCompletelyDisplayed()))
             .check(matches(isClickable()))
         progressBar.check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
@@ -90,7 +94,7 @@ class MainActivityEspressoTest {
     }
 
     @Test
-    fun activity_SearchTextEmpty(){
+    fun activity_SearchTextEmpty() {
         searchEditText.perform(click()).perform(replaceText(""), closeSoftKeyboard())
             .perform(pressImeActionButton())
         progressBar.check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
@@ -100,7 +104,7 @@ class MainActivityEspressoTest {
     }
 
     @Test
-    fun activity_SearchTextBlank(){
+    fun activity_SearchTextBlank() {
         searchEditText.perform(click()).perform(replaceText(" "), closeSoftKeyboard())
             .perform(pressImeActionButton())
         progressBar.check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
@@ -111,7 +115,8 @@ class MainActivityEspressoTest {
 
     @Test
     fun activity_SearchText_ResponseIsNull() {
-        searchEditText.perform(click()).perform(replaceText(GitHubRepository.RESPONSE_IS_NULL), closeSoftKeyboard())
+        searchEditText.perform(click())
+            .perform(replaceText(GitHubRepository.RESPONSE_IS_NULL), closeSoftKeyboard())
             .perform(pressImeActionButton())
         onView(withText(SearchPresenter.RESPONSE_IS_NULL_OR_UNSUCCESSFUL)).inRoot(ToastMatcher())
             .check(matches(isDisplayed()))
@@ -121,7 +126,8 @@ class MainActivityEspressoTest {
 
     @Test
     fun activity_SearchText_SearchResultIsNull() {
-        searchEditText.perform(click()).perform(replaceText(GitHubRepository.SEARCH_RESULT_IS_NULL), closeSoftKeyboard())
+        searchEditText.perform(click())
+            .perform(replaceText(GitHubRepository.SEARCH_RESULT_IS_NULL), closeSoftKeyboard())
             .perform(pressImeActionButton())
         onView(withText(SearchPresenter.SEARCH_RESULT_OR_TOTAL_COUNT_ARE_NULL)).inRoot(ToastMatcher())
             .check(matches(isDisplayed()))
@@ -131,7 +137,8 @@ class MainActivityEspressoTest {
 
     @Test
     fun activity_SearchText_TotalCountIsNull() {
-        searchEditText.perform(click()).perform(replaceText(GitHubRepository.TOTAL_COUNT_IS_NULL), closeSoftKeyboard())
+        searchEditText.perform(click())
+            .perform(replaceText(GitHubRepository.TOTAL_COUNT_IS_NULL), closeSoftKeyboard())
             .perform(pressImeActionButton())
         onView(withText(SearchPresenter.SEARCH_RESULT_OR_TOTAL_COUNT_ARE_NULL)).inRoot(ToastMatcher())
             .check(matches(isDisplayed()))
@@ -141,8 +148,92 @@ class MainActivityEspressoTest {
 
     @Test
     fun activity_SearchText_DisconnectNetwork() {
-        searchEditText.perform(click()).perform(replaceText(GitHubRepository.DISCONNECT_NETWORK), closeSoftKeyboard())
+        searchEditText.perform(click())
+            .perform(replaceText(GitHubRepository.DISCONNECT_NETWORK), closeSoftKeyboard())
             .perform(pressImeActionButton())
+        onView(withText(undefinedError)).inRoot(ToastMatcher())
+            .check(matches(isDisplayed()))
+        progressBar.check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
+        totalCountTextView.check(matches(withEffectiveVisibility(ViewMatchers.Visibility.INVISIBLE)))
+    }
+
+    @Test
+    fun activity_SearchText_SearchFAB() {
+        searchEditText.perform(click()).perform(replaceText(SEARCH_TEXT), closeSoftKeyboard())
+        searchFAB.perform(click())
+        progressBar.check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
+        totalCountTextView.check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
+        totalCountTextView.check(
+            matches(
+                withText(
+                    String.format(
+                        Locale.getDefault(),
+                        totalCount,
+                        GitHubRepository.TOTAL_COUNT
+                    )
+                )
+            )
+        )
+    }
+
+    @Test
+    fun activity_SearchTextEmpty_SearchFAB() {
+        searchEditText.perform(click()).perform(replaceText(""), closeSoftKeyboard())
+        searchFAB.perform(click())
+        progressBar.check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
+        totalCountTextView.check(matches(withEffectiveVisibility(ViewMatchers.Visibility.INVISIBLE)))
+        onView(withText(emptyQuery)).inRoot(ToastMatcher())
+            .check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun activity_SearchTextBlank_SearchFAB() {
+        searchEditText.perform(click()).perform(replaceText(" "), closeSoftKeyboard())
+        searchFAB.perform(click())
+        progressBar.check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
+        totalCountTextView.check(matches(withEffectiveVisibility(ViewMatchers.Visibility.INVISIBLE)))
+        onView(withText(emptyQuery)).inRoot(ToastMatcher())
+            .check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun activity_SearchText_ResponseIsNull_SearchFAB() {
+        searchEditText.perform(click())
+            .perform(replaceText(GitHubRepository.RESPONSE_IS_NULL), closeSoftKeyboard())
+        searchFAB.perform(click())
+        onView(withText(SearchPresenter.RESPONSE_IS_NULL_OR_UNSUCCESSFUL)).inRoot(ToastMatcher())
+            .check(matches(isDisplayed()))
+        progressBar.check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
+        totalCountTextView.check(matches(withEffectiveVisibility(ViewMatchers.Visibility.INVISIBLE)))
+    }
+
+    @Test
+    fun activity_SearchText_SearchResultIsNull_SearchFAB() {
+        searchEditText.perform(click())
+            .perform(replaceText(GitHubRepository.SEARCH_RESULT_IS_NULL), closeSoftKeyboard())
+        searchFAB.perform(click())
+        onView(withText(SearchPresenter.SEARCH_RESULT_OR_TOTAL_COUNT_ARE_NULL)).inRoot(ToastMatcher())
+            .check(matches(isDisplayed()))
+        progressBar.check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
+        totalCountTextView.check(matches(withEffectiveVisibility(ViewMatchers.Visibility.INVISIBLE)))
+    }
+
+    @Test
+    fun activity_SearchText_TotalCountIsNull_SearchFAB() {
+        searchEditText.perform(click())
+            .perform(replaceText(GitHubRepository.TOTAL_COUNT_IS_NULL), closeSoftKeyboard())
+        searchFAB.perform(click())
+        onView(withText(SearchPresenter.SEARCH_RESULT_OR_TOTAL_COUNT_ARE_NULL)).inRoot(ToastMatcher())
+            .check(matches(isDisplayed()))
+        progressBar.check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
+        totalCountTextView.check(matches(withEffectiveVisibility(ViewMatchers.Visibility.INVISIBLE)))
+    }
+
+    @Test
+    fun activity_SearchText_DisconnectNetwork_SearchFAB() {
+        searchEditText.perform(click())
+            .perform(replaceText(GitHubRepository.DISCONNECT_NETWORK), closeSoftKeyboard())
+        searchFAB.perform(click())
         onView(withText(undefinedError)).inRoot(ToastMatcher())
             .check(matches(isDisplayed()))
         progressBar.check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))

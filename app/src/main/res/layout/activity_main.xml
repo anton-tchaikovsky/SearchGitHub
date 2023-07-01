@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="@dimen/padding"
     xmlns:tools="http://schemas.android.com/tools">
 
     <ProgressBar
@@ -17,23 +18,36 @@
 
     <EditText
         android:id="@+id/searchEditText"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:autofillHints="name"
         android:hint="@string/search_hint"
         android:imeOptions="actionSearch"
         android:inputType="text"
         android:maxLines="1"
         android:singleLine="true"
+        app:layout_constraintEnd_toStartOf="@id/searchFloatingActionButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:autofillHints="name"/>
+        />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/searchFloatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/searchEditText"
+        android:contentDescription="@string/search_word"
+        android:src="@drawable/baseline_search_24"
+        android:layout_marginStart="@dimen/marginFAB"/>
 
     <Button
         android:id="@+id/toDetailsActivityButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin"
-        app:layout_constraintTop_toBottomOf="@id/searchEditText"
+        app:layout_constraintTop_toBottomOf="@id/searchFloatingActionButton"
         android:text="@string/to_details" />
 
     <TextView

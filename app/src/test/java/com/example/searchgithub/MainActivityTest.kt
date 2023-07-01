@@ -10,6 +10,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ActivityScenario
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.searchgithub.view.search.MainActivity
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNotNull
 import junit.framework.TestCase.assertTrue
@@ -28,6 +29,8 @@ class MainActivityTest {
 
     private lateinit var searchEditText: EditText
 
+    private lateinit var searchFAB: FloatingActionButton
+
     private lateinit var toDetailsActivityButton: Button
 
     private lateinit var progressBar: ProgressBar
@@ -38,6 +41,7 @@ class MainActivityTest {
             searchEditText = it.findViewById(R.id.searchEditText)
             toDetailsActivityButton = it.findViewById(R.id.toDetailsActivityButton)
             progressBar = it.findViewById(R.id.progressBar)
+            searchFAB = it.findViewById(R.id.searchFloatingActionButton)
         }
     }
 
@@ -53,6 +57,8 @@ class MainActivityTest {
         assertEquals(toDetailsActivityButton.visibility, View.VISIBLE)
         assertNotNull(progressBar)
         assertEquals(progressBar.visibility, View.GONE)
+        assertNotNull(searchFAB)
+        assertEquals(searchFAB.visibility, View.VISIBLE)
         assertTrue(searchEditText.text.isEmpty())
     }
 
@@ -80,6 +86,39 @@ class MainActivityTest {
     fun activity_SearchTextBlank() {
         searchEditText.setText(" ")
         searchEditText.onEditorAction(EditorInfo.IME_ACTION_SEARCH)
+        assertEquals(progressBar.visibility, View.GONE)
+        scenario.onActivity {
+            assertEquals(
+                ShadowToast.getTextOfLatestToast(),
+                it.getString(R.string.enter_search_word)
+            )
+        }
+    }
+
+    @Test
+    fun activity_SearchText_SearchFAB() {
+        searchEditText.setText(SEARCH_TEXT)
+        searchFAB.performClick()
+        assertEquals(searchEditText.text.toString(), SEARCH_TEXT)
+        assertEquals(progressBar.visibility, View.VISIBLE)
+    }
+
+    @Test
+    fun activity_SearchTextEmpty_SearchFAB() {
+        searchFAB.performClick()
+        assertEquals(progressBar.visibility, View.GONE)
+        scenario.onActivity {
+            assertEquals(
+                ShadowToast.getTextOfLatestToast(),
+                it.getString(R.string.enter_search_word)
+            )
+        }
+    }
+
+    @Test
+    fun activity_SearchTextBlank_SearchFAB() {
+        searchEditText.setText(" ")
+        searchFAB.performClick()
         assertEquals(progressBar.visibility, View.GONE)
         scenario.onActivity {
             assertEquals(
