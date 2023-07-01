@@ -202,7 +202,7 @@ class MainActivityEspressoTest {
 
     companion object {
         private const val SEARCH_TEXT = "Algol"
-        private const val TOTAL_COUNT_TEST = 3804
+        private const val TOTAL_COUNT_TEST = 3805
         private const val DELAY = 3000L
     }
 

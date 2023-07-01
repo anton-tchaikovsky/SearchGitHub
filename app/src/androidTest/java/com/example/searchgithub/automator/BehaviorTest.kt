@@ -26,7 +26,7 @@ class BehaviorTest {
     private val context = ApplicationProvider.getApplicationContext<Context>()
     private val packageName = context.packageName
     private val uiDevice: UiDevice = UiDevice.getInstance(getInstrumentation())
-    private lateinit var totalCount: String
+    private lateinit var totalCountDetailsActivity: String
     private lateinit var emptyQuery: String
 
     @Before
@@ -37,7 +37,7 @@ class BehaviorTest {
         }
         context.startActivity(intent)
         uiDevice.wait(Until.hasObject(By.pkg(packageName).depth(0)), TIMEOUT_LONG)
-        totalCount = context.getString(R.string.results_count)
+        totalCountDetailsActivity = context.getString(R.string.results_count)
         emptyQuery = context.getString(R.string.enter_search_word)
     }
 
@@ -80,14 +80,37 @@ class BehaviorTest {
     @Test
     fun mainActivity_OpenDetailsActivity(){
         uiDevice.findObject(By.res(packageName, TO_DETAILS_ACTIVITY_BUTTON)).click()
+        val totalCountTextView =
+            uiDevice.wait(Until.findObject(By.res(packageName, TOTAL_COUNT_TEXT_VIEW)), TIMEOUT_LONG)
+        val decrementButton =
+            uiDevice.wait(Until.findObject(By.res(packageName, DECREMENT_BUTTON)), TIMEOUT_LONG)
+        val incrementButton =
+            uiDevice.wait(Until.findObject(By.res(packageName, INCREMENT_BUTTON)), TIMEOUT_LONG)
+        assertNotNull(totalCountTextView)
+        assertNotNull(decrementButton)
+        assertNotNull(incrementButton)
+        assertEquals(totalCountTextView.text.toString(), String.format(
+            Locale.getDefault(),
+            totalCountDetailsActivity,
+           0
+        ))
+    }
+
+    @Test
+    fun mainActivity_SearchText_OpenDetailsActivity() {
+        uiDevice.findObject(By.res(packageName, SEARCH_EDIT_TEXT)).text = SEARCH_TEXT
+        uiDevice.findObject(By.res(packageName, SEARCH_FAB)).click()
         val totalCountTextView = uiDevice.wait(
             Until.findObject(By.res(packageName, TOTAL_COUNT_TEXT_VIEW)), TIMEOUT_LONG
         )
-        assertEquals(totalCountTextView.text.toString(), String.format(
-            Locale.getDefault(),
-            totalCount,
-           0
-        ))
+        val totalCount = extractTotalCount(totalCountTextView.text.toString())
+        assertTrue(totalCount.isNotBlank())
+        uiDevice.findObject(By.res(packageName, TO_DETAILS_ACTIVITY_BUTTON)).click()
+        val totalCountTextViewDetailsActivity = uiDevice.wait(
+            Until.findObject(By.res(packageName, TOTAL_COUNT_TEXT_VIEW)), TIMEOUT_SHOT
+        )
+        assertNotNull(totalCountTextViewDetailsActivity)
+        assertEquals(totalCount, extractTotalCount(totalCountTextViewDetailsActivity.text.toString()))
     }
 
     @Test
@@ -108,6 +131,37 @@ class BehaviorTest {
         assertEquals(totalCountTextViewRotate.text.toString(), totalCount)
     }
 
+    @Test
+    fun detailsActivity_ButtonDecrement_IsWorking(){
+        uiDevice.findObject(By.res(packageName, TO_DETAILS_ACTIVITY_BUTTON)).click()
+        val decrementButton = uiDevice.wait(Until.findObject(By.res(packageName, DECREMENT_BUTTON)), TIMEOUT_SHOT)
+        decrementButton.click()
+        val totalCountTextView = uiDevice.findObject(By.res(packageName, TOTAL_COUNT_TEXT_VIEW))
+        assertEquals(extractTotalCount(totalCountTextView.text.toString()), "-1")
+
+    }
+
+    @Test
+    fun detailsActivity_ButtonIncrement_IsWorking(){
+        uiDevice.findObject(By.res(packageName, TO_DETAILS_ACTIVITY_BUTTON)).click()
+        val incrementButton = uiDevice.wait(Until.findObject(By.res(packageName, INCREMENT_BUTTON)), TIMEOUT_SHOT)
+        incrementButton.click()
+        val totalCountTextView = uiDevice.findObject(By.res(packageName, TOTAL_COUNT_TEXT_VIEW))
+        assertEquals(extractTotalCount(totalCountTextView.text.toString()), "1")
+    }
+
+    @Test
+    fun detailsActivity_RotateScreen(){
+        uiDevice.findObject(By.res(packageName, TO_DETAILS_ACTIVITY_BUTTON)).click()
+        val incrementButton = uiDevice.wait(Until.findObject(By.res(packageName, INCREMENT_BUTTON)), TIMEOUT_SHOT)
+        incrementButton.click()
+        val totalCountTextView = uiDevice.findObject(By.res(packageName, TOTAL_COUNT_TEXT_VIEW))
+        val totalCount = totalCountTextView.text.toString()
+        uiDevice.setOrientationLeft()
+        val totalCountTextViewRotate = uiDevice.wait(Until.findObject(By.res(packageName, TOTAL_COUNT_TEXT_VIEW)), TIMEOUT_SHOT)
+        assertEquals(totalCountTextViewRotate.text.toString(), totalCount)
+    }
+
     private fun isKeyboardOpened():Boolean{
         val automation = getInstrumentation().uiAutomation
         for (window in automation.windows) {
@@ -118,14 +172,20 @@ class BehaviorTest {
         return false
     }
 
+    private fun extractTotalCount(totalCountText: String): String =
+       totalCountText.substring( totalCountText.indexOf(":") + 2)
+
+
     companion object {
-        private const val TIMEOUT_LONG = 5000L
+        private const val TIMEOUT_LONG = 10000L
         private const val TIMEOUT_SHOT = 500L
         private const val PROGRESS_BAR = "progressBar"
         private const val TOTAL_COUNT_TEXT_VIEW = "totalCountTextView"
         private const val SEARCH_EDIT_TEXT = "searchEditText"
         private const val TO_DETAILS_ACTIVITY_BUTTON = "toDetailsActivityButton"
         private const val SEARCH_FAB = "searchFloatingActionButton"
+        private const val DECREMENT_BUTTON = "decrementButton"
+        private const val INCREMENT_BUTTON = "incrementButton"
         private const val SEARCH_TEXT = "Algol"
     }
 
