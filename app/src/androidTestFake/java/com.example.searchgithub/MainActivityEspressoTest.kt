@@ -95,7 +95,7 @@ class MainActivityEspressoTest {
 
     @Test
     fun activity_SearchTextEmpty() {
-        searchEditText.perform(click()).perform(replaceText(""), closeSoftKeyboard())
+        searchEditText.perform(click()).perform(replaceText(SEARCH_EMPTY_TEXT), closeSoftKeyboard())
             .perform(pressImeActionButton())
         progressBar.check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
         totalCountTextView.check(matches(withEffectiveVisibility(ViewMatchers.Visibility.INVISIBLE)))
@@ -105,7 +105,7 @@ class MainActivityEspressoTest {
 
     @Test
     fun activity_SearchTextBlank() {
-        searchEditText.perform(click()).perform(replaceText(" "), closeSoftKeyboard())
+        searchEditText.perform(click()).perform(replaceText(SEARCH_BLANK_TEXT), closeSoftKeyboard())
             .perform(pressImeActionButton())
         progressBar.check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
         totalCountTextView.check(matches(withEffectiveVisibility(ViewMatchers.Visibility.INVISIBLE)))
@@ -178,7 +178,7 @@ class MainActivityEspressoTest {
 
     @Test
     fun activity_SearchTextEmpty_SearchFAB() {
-        searchEditText.perform(click()).perform(replaceText(""), closeSoftKeyboard())
+        searchEditText.perform(click()).perform(replaceText(SEARCH_EMPTY_TEXT), closeSoftKeyboard())
         searchFAB.perform(click())
         progressBar.check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
         totalCountTextView.check(matches(withEffectiveVisibility(ViewMatchers.Visibility.INVISIBLE)))
@@ -188,7 +188,7 @@ class MainActivityEspressoTest {
 
     @Test
     fun activity_SearchTextBlank_SearchFAB() {
-        searchEditText.perform(click()).perform(replaceText(" "), closeSoftKeyboard())
+        searchEditText.perform(click()).perform(replaceText(SEARCH_BLANK_TEXT), closeSoftKeyboard())
         searchFAB.perform(click())
         progressBar.check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
         totalCountTextView.check(matches(withEffectiveVisibility(ViewMatchers.Visibility.INVISIBLE)))
@@ -243,10 +243,6 @@ class MainActivityEspressoTest {
     @After
     fun close() {
         scenario.close()
-    }
-
-    companion object {
-        private const val SEARCH_TEXT = "Algol"
     }
 
 }

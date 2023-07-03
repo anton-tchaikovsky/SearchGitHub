@@ -14,13 +14,13 @@ import org.mockito.MockitoAnnotations
 
 class DetailsPresenterTest {
 
-    private val presenter = DetailsPresenter(COUNT_TEST)
+    private val presenter = DetailsPresenter(TOTAL_COUNT_TEST)
 
     @Mock
     private lateinit var view: ViewDetailsContract
 
     @Before
-    fun setup(){
+    fun setup() {
         MockitoAnnotations.openMocks(this)
     }
 
@@ -28,51 +28,47 @@ class DetailsPresenterTest {
     fun onAttach_FirstAttach_Test() {
         assertNull(presenter.viewContract)
         presenter.onAttach(view)
-        assertEquals(presenter.count, COUNT_TEST)
+        assertEquals(presenter.count, TOTAL_COUNT_TEST)
         assertEquals(presenter.viewContract, view)
-        verify(view, Mockito.times(1)).setCount(COUNT_TEST)
+        verify(view, Mockito.times(1)).setCount(TOTAL_COUNT_TEST)
     }
 
     @Test
     fun onAttach_BeforeRestartViewContract_Test() {
         assertNull(presenter.viewContract)
         presenter.onAttach(view)
-        assertEquals(presenter.count, COUNT_TEST)
+        assertEquals(presenter.count, TOTAL_COUNT_TEST)
         assertEquals(presenter.viewContract, view)
-        verify(view, Mockito.times(1)).setCount(COUNT_TEST)
+        verify(view, Mockito.times(1)).setCount(TOTAL_COUNT_TEST)
     }
 
     @Test
     fun onDetach_Test() {
         presenter.onAttach(view)
         presenter.onDetach()
-        assertEquals(presenter.count, COUNT_TEST)
+        assertEquals(presenter.count, TOTAL_COUNT_TEST)
         assertNull(presenter.viewContract)
     }
 
     @Test
-    fun onIncrement_Test(){
+    fun onIncrement_Test() {
         presenter.onAttach(view)
         presenter.onIncrement()
-        assertEquals(presenter.count, COUNT_TEST +1)
-        verify(view, Mockito.times(1)).setCount(COUNT_TEST +1)
+        assertEquals(presenter.count, TOTAL_COUNT_TEST + TOTAL_COUNT_INCREMENT)
+        verify(view, Mockito.times(1)).setCount(TOTAL_COUNT_TEST + TOTAL_COUNT_INCREMENT)
     }
 
     @Test
-    fun onDecrement_Test(){
+    fun onDecrement_Test() {
         presenter.onAttach(view)
         presenter.onDecrement()
-        assertEquals(presenter.count, COUNT_TEST -1)
-        verify(view, Mockito.times(1)).setCount(COUNT_TEST -1)
+        assertEquals(presenter.count, TOTAL_COUNT_TEST + TOTAL_COUNT_DECREMENT)
+        verify(view, Mockito.times(1)).setCount(TOTAL_COUNT_TEST + TOTAL_COUNT_DECREMENT)
     }
 
     @After
     fun tearDown() {
         MockitoAnnotations.openMocks(this).close()
-    }
-
-    companion object{
-        private const val COUNT_TEST = 10
     }
 
 }

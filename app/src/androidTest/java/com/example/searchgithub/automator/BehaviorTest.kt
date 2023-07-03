@@ -12,6 +12,10 @@ import androidx.test.uiautomator.By
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.Until
 import com.example.searchgithub.R
+import com.example.searchgithub.SEARCH_TEXT
+import com.example.searchgithub.TOTAL_COUNT_DECREMENT
+import com.example.searchgithub.TOTAL_COUNT_INCREMENT
+import com.example.searchgithub.TOTAL_COUNT_ZERO
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNotNull
 import junit.framework.TestCase.assertNull
@@ -92,7 +96,7 @@ class BehaviorTest {
         assertEquals(totalCountTextView.text.toString(), String.format(
             Locale.getDefault(),
             totalCountDetailsActivity,
-           0
+           TOTAL_COUNT_ZERO
         ))
     }
 
@@ -137,7 +141,7 @@ class BehaviorTest {
         val decrementButton = uiDevice.wait(Until.findObject(By.res(packageName, DECREMENT_BUTTON)), TIMEOUT_SHOT)
         decrementButton.click()
         val totalCountTextView = uiDevice.findObject(By.res(packageName, TOTAL_COUNT_TEXT_VIEW))
-        assertEquals(extractTotalCount(totalCountTextView.text.toString()), "-1")
+        assertEquals(extractTotalCount(totalCountTextView.text.toString()), TOTAL_COUNT_DECREMENT.toString())
 
     }
 
@@ -147,7 +151,7 @@ class BehaviorTest {
         val incrementButton = uiDevice.wait(Until.findObject(By.res(packageName, INCREMENT_BUTTON)), TIMEOUT_SHOT)
         incrementButton.click()
         val totalCountTextView = uiDevice.findObject(By.res(packageName, TOTAL_COUNT_TEXT_VIEW))
-        assertEquals(extractTotalCount(totalCountTextView.text.toString()), "1")
+        assertEquals(extractTotalCount(totalCountTextView.text.toString()), TOTAL_COUNT_INCREMENT.toString())
     }
 
     @Test
@@ -186,7 +190,6 @@ class BehaviorTest {
         private const val SEARCH_FAB = "searchFloatingActionButton"
         private const val DECREMENT_BUTTON = "decrementButton"
         private const val INCREMENT_BUTTON = "incrementButton"
-        private const val SEARCH_TEXT = "Algol"
     }
 
 }

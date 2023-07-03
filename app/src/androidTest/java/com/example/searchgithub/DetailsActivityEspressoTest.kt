@@ -58,7 +58,7 @@ class DetailsActivityEspressoTest {
                     String.format(
                         Locale.getDefault(),
                         totalCount,
-                        0
+                        TOTAL_COUNT_ZERO
                     )
                 )
             )
@@ -90,7 +90,7 @@ class DetailsActivityEspressoTest {
                     String.format(
                         Locale.getDefault(),
                         totalCount,
-                        -1
+                        TOTAL_COUNT_DECREMENT
                     )
                 )
             )
@@ -102,7 +102,7 @@ class DetailsActivityEspressoTest {
                     String.format(
                         Locale.getDefault(),
                         totalCount,
-                        0
+                        TOTAL_COUNT_ZERO
                     )
                 )
             )
