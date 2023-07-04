@@ -2,7 +2,6 @@ package com.example.searchgithub.automator
 
 import android.content.Context
 import android.content.Intent
-import android.view.accessibility.AccessibilityWindowInfo
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.action.ViewActions
@@ -16,6 +15,7 @@ import com.example.searchgithub.SEARCH_TEXT
 import com.example.searchgithub.TOTAL_COUNT_DECREMENT
 import com.example.searchgithub.TOTAL_COUNT_INCREMENT
 import com.example.searchgithub.TOTAL_COUNT_ZERO
+import com.example.searchgithub.isKeyboardOpened
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNotNull
 import junit.framework.TestCase.assertNull
@@ -164,16 +164,6 @@ class BehaviorTest {
         uiDevice.setOrientationLeft()
         val totalCountTextViewRotate = uiDevice.wait(Until.findObject(By.res(packageName, TOTAL_COUNT_TEXT_VIEW)), TIMEOUT_SHOT)
         assertEquals(totalCountTextViewRotate.text.toString(), totalCount)
-    }
-
-    private fun isKeyboardOpened():Boolean{
-        val automation = getInstrumentation().uiAutomation
-        for (window in automation.windows) {
-            if (window.type == AccessibilityWindowInfo.TYPE_INPUT_METHOD) {
-                return true
-            }
-        }
-        return false
     }
 
     private fun extractTotalCount(totalCountText: String): String =

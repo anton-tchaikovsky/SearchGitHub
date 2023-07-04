@@ -1,8 +1,6 @@
 package com.example.searchgithub.view.search
 
 
-import android.view.View
-import android.view.ViewGroup
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.*
@@ -10,11 +8,13 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
+import com.example.searchgithub.DELAY_LONG
 import com.example.searchgithub.R
-import org.hamcrest.Description
-import org.hamcrest.Matcher
+import com.example.searchgithub.SEARCH_TEXT
+import com.example.searchgithub.SEARCH_WORD
+import com.example.searchgithub.TOTAL_COUNT_TEXT_TEST
+import com.example.searchgithub.delay
 import org.hamcrest.Matchers.allOf
-import org.hamcrest.TypeSafeMatcher
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -29,66 +29,31 @@ class MainActivityTestSearch {
 
     @Test
     fun mainActivityTestSearch() {
-        // Added a sleep statement to match the app's execution delay.
-        // The recommended way to handle such scenarios is to use Espresso idling resources:
-        // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
-        Thread.sleep(500)
 
-        val appCompatEditText = onView(
+        val searchEditText = onView(
             allOf(
                 withId(R.id.searchEditText),
-                childAtPosition(
-                    childAtPosition(
-                        withId(android.R.id.content),
-                        0
-                    ),
-                    1
-                ),
                 isDisplayed()
             )
         )
-        appCompatEditText.perform(replaceText("algol"), closeSoftKeyboard())
+        searchEditText.perform(replaceText(SEARCH_TEXT), closeSoftKeyboard())
 
-        val floatingActionButton = onView(
+        val searchFAB = onView(
             allOf(
-                withId(R.id.searchFloatingActionButton), withContentDescription("Search word"),
-                childAtPosition(
-                    childAtPosition(
-                        withId(android.R.id.content),
-                        0
-                    ),
-                    2
-                ),
+                withId(R.id.searchFloatingActionButton), withContentDescription(SEARCH_WORD),
                 isDisplayed()
             )
         )
-        floatingActionButton.perform(click())
+        searchFAB.perform(click())
+        onView(isRoot()).perform(delay(DELAY_LONG))
 
-        val textView = onView(
+        val totalCountTextView = onView(
             allOf(
-                withId(R.id.totalCountTextView), withText("Number of results: 3807"),
-                withParent(withParent(withId(android.R.id.content))),
+                withId(R.id.totalCountTextView),
                 isDisplayed()
             )
         )
-        textView.check(matches(withText("Number of results: 3807")))
+        totalCountTextView.check(matches(withText(TOTAL_COUNT_TEXT_TEST)))
     }
 
-    private fun childAtPosition(
-        parentMatcher: Matcher<View>, position: Int
-    ): Matcher<View> {
-
-        return object : TypeSafeMatcher<View>() {
-            override fun describeTo(description: Description) {
-                description.appendText("Child at position $position in parent ")
-                parentMatcher.describeTo(description)
-            }
-
-            public override fun matchesSafely(view: View): Boolean {
-                val parent = view.parent
-                return parent is ViewGroup && parentMatcher.matches(parent)
-                        && view == parent.getChildAt(position)
-            }
-        }
-    }
 }

@@ -1,11 +1,8 @@
 package com.example.searchgithub
 
-import android.view.View
 import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.UiController
-import androidx.test.espresso.ViewAction
 import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.closeSoftKeyboard
@@ -27,7 +24,6 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import java.util.Locale
-import org.hamcrest.Matcher
 
 class MainActivityEspressoTest {
 
@@ -82,7 +78,7 @@ class MainActivityEspressoTest {
         searchEditText.perform(click()).perform(replaceText(SEARCH_TEXT), closeSoftKeyboard())
             .perform(pressImeActionButton())
         progressBar.check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
-        onView(isRoot()).perform(delay())
+        onView(isRoot()).perform(delay(DELAY_LONG))
         progressBar.check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
         totalCountTextView.check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
         totalCountTextView.check(
@@ -136,7 +132,7 @@ class MainActivityEspressoTest {
         searchEditText.perform(click()).perform(replaceText(SEARCH_TEXT), closeSoftKeyboard())
         searchFAB.perform(click())
         progressBar.check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
-        onView(isRoot()).perform(delay())
+        onView(isRoot()).perform(delay(DELAY_LONG))
         progressBar.check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
         totalCountTextView.check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
         totalCountTextView.check(
@@ -188,20 +184,6 @@ class MainActivityEspressoTest {
     @After
     fun close() {
         scenario.close()
-    }
-
-    private fun delay(): ViewAction {
-        return object : ViewAction {
-            override fun getConstraints(): Matcher<View> = isRoot()
-            override fun getDescription(): String = "wait for $3 seconds"
-            override fun perform(uiController: UiController, v: View?) {
-                uiController.loopMainThreadForAtLeast(DELAY)
-            }
-        }
-    }
-
-    companion object {
-        private const val DELAY = 3000L
     }
 
 }
