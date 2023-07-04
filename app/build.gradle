@@ -23,6 +23,9 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        debug {
+            versionNameSuffix "-debug"
+        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
@@ -35,6 +38,28 @@ android {
     testOptions {
         unitTests {
             includeAndroidResources = true
+        }
+    }
+//    flavorDimensions 'data_type'
+
+    buildFeatures {
+        buildConfig = true
+    }
+    kapt {
+        generateStubs = true
+    }
+
+    flavorDimensions "default"
+    productFlavors {
+        real {
+            applicationIdSuffix ".real"
+            versionNameSuffix "-real"
+            buildConfigField "String", "TYPE", '"REAL"'
+        }
+        fake {
+            applicationIdSuffix ".fake"
+            versionNameSuffix "-fake"
+            buildConfigField "String", "TYPE", '"FAKE"'
         }
     }
 
@@ -65,4 +90,9 @@ dependencies {
     testImplementation 'androidx.test.ext:truth:1.5.0'
     testImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     testImplementation 'androidx.test.espresso:espresso-intents:3.5.1'
+    //Dagger2
+    implementation 'com.google.dagger:dagger-android:2.46'
+    implementation 'com.google.dagger:dagger-android-support:2.46'
+    kapt 'com.google.dagger:dagger-android-processor:2.46'
+    kapt 'com.google.dagger:dagger-compiler:2.46'
 }

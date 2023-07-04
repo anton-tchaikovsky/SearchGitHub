@@ -57,7 +57,7 @@ class MainActivityTest {
     }
 
     @Test
-    fun activity_SearchText(){
+    fun activity_SearchText() {
         searchEditText.setText(SEARCH_TEXT)
         searchEditText.onEditorAction(EditorInfo.IME_ACTION_SEARCH)
         assertEquals(searchEditText.text.toString(), SEARCH_TEXT)
@@ -65,21 +65,27 @@ class MainActivityTest {
     }
 
     @Test
-    fun activity_SearchTextEmpty(){
+    fun activity_SearchTextEmpty() {
         searchEditText.onEditorAction(EditorInfo.IME_ACTION_SEARCH)
         assertEquals(progressBar.visibility, View.GONE)
         scenario.onActivity {
-            assertEquals(ShadowToast.getTextOfLatestToast(), it.getString(R.string.enter_search_word))
+            assertEquals(
+                ShadowToast.getTextOfLatestToast(),
+                it.getString(R.string.enter_search_word)
+            )
         }
     }
 
     @Test
-    fun activity_SearchTextBlank(){
+    fun activity_SearchTextBlank() {
         searchEditText.setText(" ")
         searchEditText.onEditorAction(EditorInfo.IME_ACTION_SEARCH)
         assertEquals(progressBar.visibility, View.GONE)
         scenario.onActivity {
-            assertEquals(ShadowToast.getTextOfLatestToast(), it.getString(R.string.enter_search_word))
+            assertEquals(
+                ShadowToast.getTextOfLatestToast(),
+                it.getString(R.string.enter_search_word)
+            )
         }
     }
 
@@ -88,7 +94,7 @@ class MainActivityTest {
         scenario.close()
     }
 
-    companion object{
+    companion object {
         private const val SEARCH_TEXT = "Android"
     }
 

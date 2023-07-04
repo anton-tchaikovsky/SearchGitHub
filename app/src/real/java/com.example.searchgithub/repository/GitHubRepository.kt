@@ -4,8 +4,9 @@ import com.example.searchgithub.model.SearchResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
-internal class GitHubRepository(private val gitHubApi: GitHubApi): IGitHubRepository {
+class GitHubRepository @Inject constructor (private val gitHubApi: GitHubApi): IGitHubRepository {
 
     override fun searchGithub(
         query: String,

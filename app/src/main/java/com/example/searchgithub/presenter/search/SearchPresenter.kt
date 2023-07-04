@@ -6,8 +6,9 @@ import com.example.searchgithub.repository.GitHubRepositoryCallback
 import com.example.searchgithub.repository.IGitHubRepository
 import com.example.searchgithub.view.search.ViewSearchContract
 import retrofit2.Response
+import javax.inject.Inject
 
-internal class SearchPresenter internal constructor(
+class SearchPresenter @Inject internal constructor(
     private val repository: IGitHubRepository
 ) : PresenterSearchContract, GitHubRepositoryCallback {
 
@@ -42,15 +43,20 @@ internal class SearchPresenter internal constructor(
                     totalCount
                 )
             } else {
-                viewContract?.displayError("Search results or total count are null")
+                viewContract?.displayError(SEARCH_RESULT_OR_TOTAL_COUNT_ARE_NULL)
             }
         } else {
-            viewContract?.displayError("Response is null or unsuccessful")
+            viewContract?.displayError(RESPONSE_IS_NULL_OR_UNSUCCESSFUL)
         }
     }
 
     override fun handleGitHubError() {
         viewContract?.displayLoading(false)
         viewContract?.displayError()
+    }
+
+    companion object{
+        const val RESPONSE_IS_NULL_OR_UNSUCCESSFUL = "Response is null or unsuccessful"
+        const val SEARCH_RESULT_OR_TOTAL_COUNT_ARE_NULL = "Search results or total count are null"
     }
 }
