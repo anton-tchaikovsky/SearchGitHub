@@ -95,4 +95,6 @@ dependencies {
     implementation 'com.google.dagger:dagger-android-support:2.46'
     kapt 'com.google.dagger:dagger-android-processor:2.46'
     kapt 'com.google.dagger:dagger-compiler:2.46'
+    //UI Automator
+    androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
 }
