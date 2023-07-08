@@ -9,7 +9,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import org.hamcrest.Matcher
 
 internal const val SEARCH_TEXT = "Algol"
-internal const val TOTAL_COUNT_TEST = 3807
+internal const val TOTAL_COUNT_TEST = 3808
 internal const val TOTAL_COUNT_INCREMENT = 1
 internal const val TOTAL_COUNT_DECREMENT = -1
 internal const val TOTAL_COUNT_ZERO = 0
@@ -19,6 +19,8 @@ internal const val TOTAL_COUNT_TEXT_DECREMENT = "Number of results: $TOTAL_COUNT
 internal const val TOTAL_COUNT_TEXT_ZERO = "Number of results: $TOTAL_COUNT_ZERO"
 internal const val SEARCH_EMPTY_TEXT = ""
 internal const val SEARCH_BLANK_TEXT = " "
+internal const val RECYCLE_VIEW_POSITION_TEST = 25
+internal const val RECYCLE_VIEW_FULL_NAME_FAKE = "FullName: 20"
 
 internal const val DELAY_LONG = 5000L
 internal const val DELAY_SHOT = 500L
