@@ -55,38 +55,34 @@ class DetailsActivityTest {
         assertEquals(decrementButton.visibility, View.VISIBLE)
         assertNotNull(incrementButton)
         assertEquals(incrementButton.visibility, View.VISIBLE)
-        assertEquals(totalCountTextView.text, String.format(Locale.getDefault(), totalCount, 0))
+        assertEquals(totalCountTextView.text, String.format(Locale.getDefault(), totalCount, TOTAL_COUNT_ZERO))
     }
 
     @Test
     fun activityButtonIncrement_IsWorking() {
         incrementButton.performClick()
-        assertEquals(totalCountTextView.text, String.format(Locale.getDefault(), totalCount, 1))
+        assertEquals(totalCountTextView.text, String.format(Locale.getDefault(), totalCount, TOTAL_COUNT_INCREMENT))
     }
 
     @Test
     fun activityButtonDecrement_IsWorking() {
         decrementButton.performClick()
-        assertEquals(totalCountTextView.text, String.format(Locale.getDefault(), totalCount, -1))
+        assertEquals(totalCountTextView.text, String.format(Locale.getDefault(), totalCount, TOTAL_COUNT_DECREMENT))
     }
 
     @Test
     fun activityCreateIntent(){
         val context: Context = ApplicationProvider.getApplicationContext()
-        val intent = DetailsActivity.getIntent(context, TOTAL_COUNT)
+        val intent = DetailsActivity.getIntent(context, TOTAL_COUNT_TEST)
         val bundle = intent.extras
         assertNotNull(intent)
         assertNotNull(bundle)
-        assertEquals(bundle?.getInt(DetailsActivity.TOTAL_COUNT_EXTRA, 0), TOTAL_COUNT)
+        assertEquals(bundle?.getInt(DetailsActivity.TOTAL_COUNT_EXTRA, TOTAL_COUNT_ZERO), TOTAL_COUNT_TEST)
     }
 
     @After
     fun close() {
         scenario.close()
-    }
-
-    companion object{
-        private const val TOTAL_COUNT = 10
     }
 
 }

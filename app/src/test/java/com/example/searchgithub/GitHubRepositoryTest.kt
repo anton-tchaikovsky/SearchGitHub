@@ -32,8 +32,8 @@ class GitHubRepositoryTest {
 
     @Test
     fun searchGithub_Test() {
-        repository.searchGithub(SEARCH_QUERY, gitHubRepositoryCallback)
-        verify(gitHubApi, Mockito.times(1)).searchGithub(SEARCH_QUERY)
+        repository.searchGithub(SEARCH_TEXT, gitHubRepositoryCallback)
+        verify(gitHubApi, Mockito.times(1)).searchGithub(SEARCH_TEXT)
     }
 
     @Test
@@ -72,8 +72,8 @@ class GitHubRepositoryTest {
             }
 
         }
-        Mockito.`when`(gitHubApi.searchGithub(SEARCH_QUERY)).thenReturn(call)
-        repository.searchGithub(SEARCH_QUERY, gitHubRepositoryCallback)
+        Mockito.`when`(gitHubApi.searchGithub(SEARCH_TEXT)).thenReturn(call)
+        repository.searchGithub(SEARCH_TEXT, gitHubRepositoryCallback)
         verify(gitHubRepositoryCallback, Mockito.times(1)).handleGitHubResponse(response)
 
     }
@@ -114,8 +114,8 @@ class GitHubRepositoryTest {
             }
 
         }
-        Mockito.`when`(gitHubApi.searchGithub(SEARCH_QUERY)).thenReturn(call)
-        repository.searchGithub(SEARCH_QUERY, gitHubRepositoryCallback)
+        Mockito.`when`(gitHubApi.searchGithub(SEARCH_TEXT)).thenReturn(call)
+        repository.searchGithub(SEARCH_TEXT, gitHubRepositoryCallback)
         verify(gitHubRepositoryCallback, Mockito.times(1)).handleGitHubError()
 
     }
@@ -126,7 +126,6 @@ class GitHubRepositoryTest {
     }
 
     companion object {
-        private const val SEARCH_QUERY = "Android"
         private val gitHubRepositoryCallback = Mockito.mock(GitHubRepositoryCallback::class.java)
         @Suppress("UNCHECKED_CAST")
         private val response = Mockito.mock(Response::class.java) as Response<SearchResponse?>

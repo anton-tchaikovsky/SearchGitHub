@@ -39,7 +39,7 @@ class SearchPresenterTest {
         assertNull(presenter.viewContract)
         presenter.onAttach(view)
         assertEquals(presenter.searchResults, listOf<SearchResult>())
-        assertEquals(presenter.totalCount, 0)
+        assertEquals(presenter.totalCount, TOTAL_COUNT_ZERO)
         assertEquals(presenter.viewContract, view)
         verify(view, Mockito.never()).displaySearchResults(any(), any())
     }
@@ -71,11 +71,11 @@ class SearchPresenterTest {
     @Test
     fun onAttach_BeforeRestartViewContract_TotalCountZero_Test() {
         presenter.searchResults = searchResult_Test
-        presenter.totalCount = 0
+        presenter.totalCount = TOTAL_COUNT_ZERO
         assertNull(presenter.viewContract)
         presenter.onAttach(view)
         assertEquals(presenter.searchResults, searchResult_Test)
-        assertEquals(presenter.totalCount, 0)
+        assertEquals(presenter.totalCount, TOTAL_COUNT_ZERO)
         assertEquals(presenter.viewContract, view)
         verify(view, Mockito.never()).displaySearchResults(any(), any())
     }
@@ -94,9 +94,9 @@ class SearchPresenterTest {
     @Test
     fun searchGitHub_Test() {
         presenter.onAttach(view)
-        presenter.searchGitHub(SEARCH_QUERY)
+        presenter.searchGitHub(SEARCH_TEXT)
         verify(view, Mockito.times(1)).displayLoading(true)
-        verify(repository, Mockito.times(1)).searchGithub(SEARCH_QUERY, presenter)
+        verify(repository, Mockito.times(1)).searchGithub(SEARCH_TEXT, presenter)
     }
 
     @Test
@@ -207,11 +207,6 @@ class SearchPresenterTest {
         @Suppress("UNCHECKED_CAST")
         private val responseTest = Mockito.mock(Response::class.java) as Response<SearchResponse?>
         private val searchResponse = Mockito.mock(SearchResponse::class.java)
-        private const val TOTAL_COUNT_TEST = 10
-        private const val SEARCH_QUERY = "Android"
-        private const val RESPONSE_UNSUCCESSFUL = "Response is null or unsuccessful"
-        private const val SEARCH_RESULT_OR_TOTAL_COUNT_NULL =
-            "Search results or total count are null"
     }
 
 }

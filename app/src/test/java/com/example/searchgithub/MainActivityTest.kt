@@ -72,6 +72,7 @@ class MainActivityTest {
 
     @Test
     fun activity_SearchTextEmpty() {
+        searchEditText.setText(SEARCH_EMPTY_TEXT)
         searchEditText.onEditorAction(EditorInfo.IME_ACTION_SEARCH)
         assertEquals(progressBar.visibility, View.GONE)
         scenario.onActivity {
@@ -84,7 +85,7 @@ class MainActivityTest {
 
     @Test
     fun activity_SearchTextBlank() {
-        searchEditText.setText(" ")
+        searchEditText.setText(SEARCH_BLANK_TEXT)
         searchEditText.onEditorAction(EditorInfo.IME_ACTION_SEARCH)
         assertEquals(progressBar.visibility, View.GONE)
         scenario.onActivity {
@@ -97,6 +98,7 @@ class MainActivityTest {
 
     @Test
     fun activity_SearchText_SearchFAB() {
+        searchEditText.setText(SEARCH_EMPTY_TEXT)
         searchEditText.setText(SEARCH_TEXT)
         searchFAB.performClick()
         assertEquals(searchEditText.text.toString(), SEARCH_TEXT)
@@ -117,7 +119,7 @@ class MainActivityTest {
 
     @Test
     fun activity_SearchTextBlank_SearchFAB() {
-        searchEditText.setText(" ")
+        searchEditText.setText(SEARCH_BLANK_TEXT)
         searchFAB.performClick()
         assertEquals(progressBar.visibility, View.GONE)
         scenario.onActivity {
@@ -131,10 +133,6 @@ class MainActivityTest {
     @After
     fun close() {
         scenario.close()
-    }
-
-    companion object {
-        private const val SEARCH_TEXT = "Android"
     }
 
 }
