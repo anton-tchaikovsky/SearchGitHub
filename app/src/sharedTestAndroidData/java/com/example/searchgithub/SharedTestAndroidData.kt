@@ -2,6 +2,7 @@ package com.example.searchgithub
 
 import android.view.View
 import android.view.accessibility.AccessibilityWindowInfo
+import android.widget.CheckBox
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.matcher.ViewMatchers
@@ -19,8 +20,9 @@ internal const val TOTAL_COUNT_TEXT_DECREMENT = "Number of results: $TOTAL_COUNT
 internal const val TOTAL_COUNT_TEXT_ZERO = "Number of results: $TOTAL_COUNT_ZERO"
 internal const val SEARCH_EMPTY_TEXT = ""
 internal const val SEARCH_BLANK_TEXT = " "
-internal const val RECYCLE_VIEW_POSITION_TEST = 25
-internal const val RECYCLE_VIEW_FULL_NAME_FAKE = "FullName: 20"
+internal const val RECYCLE_VIEW_POSITION_TEST = 20
+internal const val RECYCLE_VIEW_FULL_NAME_REAL = "algolia/algoliasearch-client-go"
+internal const val RECYCLE_VIEW_FULL_NAME_FAKE = "FullName: 15"
 
 internal const val DELAY_LONG = 5000L
 internal const val DELAY_SHOT = 500L
@@ -48,6 +50,20 @@ internal fun isKeyboardOpened():Boolean{
     }
     return false
 }
+
+internal fun tapOnItemWithId(id: Int) = object : ViewAction {
+    override fun getConstraints(): Matcher<View>? {
+        return null
+    }
+    override fun getDescription(): String {
+        return "Tap on item with id"
+    }
+    override fun perform(uiController: UiController, view: View) {
+        val v = view.findViewById(id) as CheckBox
+        v.performClick()
+    }
+}
+
 
 
 
