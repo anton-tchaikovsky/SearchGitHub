@@ -3,62 +3,25 @@ package com.example.searchgithub.view.details
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.example.searchgithub.App
 import com.example.searchgithub.R
-import com.example.searchgithub.presenter.details.DetailsPresenter
-import com.example.searchgithub.presenter.details.PresenterDetailsContract
-import java.util.*
-import javax.inject.Inject
 
-class DetailsActivity : AppCompatActivity(), ViewDetailsContract {
-
-    @Inject
-    lateinit var presenter: PresenterDetailsContract
+class DetailsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        App.instance.appComponent.inject(this)
         setContentView(R.layout.activity_details)
-        setUI()
-        presenter = extractPresenter()
-        presenter.onAttach(this)
+        if (savedInstanceState == null)
+            openDetailsFragment(intent.getIntExtra(TOTAL_COUNT_EXTRA, 0))
     }
 
-    @Deprecated("Deprecated in Java")
-    override fun onRetainCustomNonConfigurationInstance(): PresenterDetailsContract {
-        return presenter
-    }
-
-    @Suppress("DEPRECATION")
-    private fun extractPresenter(): PresenterDetailsContract =
-        lastCustomNonConfigurationInstance as? PresenterDetailsContract ?: DetailsPresenter(
-            intent.getIntExtra(TOTAL_COUNT_EXTRA, 0)
-        )
-
-    private fun setUI() {
-        findViewById<Button>(R.id.decrementButton).setOnClickListener { presenter.onDecrement() }
-        findViewById<Button>(R.id.incrementButton).setOnClickListener { presenter.onIncrement() }
-    }
-
-    override fun setCount(count: Int) {
-        setCountText(count)
-    }
-
-    override fun onDestroy() {
-        presenter.onDetach()
-        super.onDestroy()
-    }
-
-    private fun setCountText(count: Int) {
-        findViewById<TextView>(R.id.totalCountTextView).text =
-            String.format(Locale.getDefault(), getString(R.string.results_count), count)
+    private fun openDetailsFragment(count: Int) {
+        supportFragmentManager.beginTransaction()
+            .add(R.id.details_fragment_container, DetailsFragment.getInstance(count))
+            .commitAllowingStateLoss()
     }
 
     companion object {
-
         const val TOTAL_COUNT_EXTRA = "TOTAL_COUNT_EXTRA"
 
         fun getIntent(context: Context, totalCount: Int): Intent {
