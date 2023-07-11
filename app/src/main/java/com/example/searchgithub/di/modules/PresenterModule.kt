@@ -1,5 +1,6 @@
 package com.example.searchgithub.di.modules
 
+import com.example.githubusers.scheduler_provider.ISchedulerProvider
 import com.example.searchgithub.presenter.details.DetailsPresenter
 import com.example.searchgithub.presenter.details.PresenterDetailsContract
 import com.example.searchgithub.presenter.search.PresenterSearchContract
@@ -12,8 +13,8 @@ import dagger.Provides
 class PresenterModule {
 
     @Provides
-    fun searchPresenter(repository: IGitHubRepository): PresenterSearchContract =
-        SearchPresenter(repository)
+    fun searchPresenter(repository: IGitHubRepository, schedulerProvider: ISchedulerProvider): PresenterSearchContract =
+        SearchPresenter(repository, schedulerProvider)
 
     @Provides
     fun detailsPresenter(): PresenterDetailsContract =

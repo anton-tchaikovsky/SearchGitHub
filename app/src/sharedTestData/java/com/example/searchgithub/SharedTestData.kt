@@ -10,4 +10,5 @@ internal const val TOTAL_COUNT_TEST = 10
 internal const val RESPONSE_UNSUCCESSFUL = "Response is null or unsuccessful"
 internal const val SEARCH_RESULT_OR_TOTAL_COUNT_NULL =
     "Search results or total count are null"
+internal const val ERROR_MESSAGE_TEST = "Error"
 

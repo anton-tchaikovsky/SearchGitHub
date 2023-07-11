@@ -5,6 +5,7 @@ import com.example.searchgithub.App
 import com.example.searchgithub.di.modules.GitHubApiModule
 import com.example.searchgithub.di.modules.PresenterModule
 import com.example.searchgithub.di.modules.RepositoryModule
+import com.example.searchgithub.di.modules.SchedulerProviderModule
 import com.example.searchgithub.view.details.DetailsFragment
 import com.example.searchgithub.view.search.MainActivity
 import dagger.BindsInstance
@@ -15,7 +16,8 @@ import javax.inject.Singleton
 @Component(
     modules = [RepositoryModule::class,
         PresenterModule::class,
-        GitHubApiModule::class
+        GitHubApiModule::class,
+        SchedulerProviderModule::class
     ]
 )
 interface AppComponent {

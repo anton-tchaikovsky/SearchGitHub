@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity(), ViewSearchContract {
     private fun extractPresenter(): PresenterSearchContract =
         lastCustomNonConfigurationInstance as? PresenterSearchContract ?: presenter
 
-    @Deprecated("Deprecated in Java")
+    @Deprecated("Deprecated in Java", ReplaceWith("presenter"))
     override fun onRetainCustomNonConfigurationInstance(): PresenterSearchContract {
         return presenter
     }
@@ -105,10 +105,6 @@ class MainActivity : AppCompatActivity(), ViewSearchContract {
         }
         this.totalCount = totalCount
         searchResultAdapter.updateResults(searchResults)
-    }
-
-    override fun displayError() {
-        Toast.makeText(this, getString(R.string.undefined_error), Toast.LENGTH_SHORT).show()
     }
 
     override fun displayError(error: String) {
