@@ -101,6 +101,7 @@ dependencies {
     testImplementation 'androidx.test.espresso:espresso-intents:3.5.1'
     debugImplementation 'androidx.fragment:fragment-testing:1.6.0'
     debugImplementation 'androidx.test.espresso:espresso-contrib:3.5.1'
+    testImplementation 'androidx.arch.core:core-testing:2.2.0'
     //Robolectric
     testImplementation 'org.robolectric:robolectric:4.10.3'
     //Dagger2
