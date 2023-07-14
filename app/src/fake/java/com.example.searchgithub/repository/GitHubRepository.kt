@@ -2,46 +2,23 @@ package com.example.searchgithub.repository
 
 import com.example.searchgithub.model.SearchResponse
 import com.example.searchgithub.model.SearchResult
-import retrofit2.Response
+import java.io.IOException
 import javax.inject.Inject
 import kotlin.random.Random
 
-class GitHubRepository @Inject constructor(@Suppress("unused") private val gitHubApi: GitHubApi) : IGitHubRepository {
+class GitHubRepository @Inject constructor(@Suppress("unused") private val gitHubApi: GitHubApi) :
+    IGitHubRepository {
 
-    override fun searchGithub(
-        query: String,
-        callback: GitHubRepositoryCallback
-    ) {
+    override suspend fun searchGithub(query: String): SearchResponse =
         when (query) {
-            RESPONSE_IS_NULL -> callback.handleGitHubResponse(null)
-            SEARCH_RESULT_IS_NULL -> callback.handleGitHubResponse(
-                Response.success(
-                    SearchResponse(
-                        TOTAL_COUNT,
-                        null
-                    )
-                )
-            )
-
-            TOTAL_COUNT_IS_NULL -> callback.handleGitHubResponse(
-                Response.success(
-                    SearchResponse(
-                        null,
-                        listOf()
-                    )
-                )
-            )
-
-            DISCONNECT_NETWORK -> callback.handleGitHubError()
-            else -> callback.handleGitHubResponse(
-                Response.success(
-                    getSearchResponse()
-                )
-            )
+            RESPONSE_IS_NULL -> throw IOException(RESPONSE_IS_NULL)
+            SEARCH_RESULT_IS_NULL -> SearchResponse(TOTAL_COUNT, null)
+            TOTAL_COUNT_IS_NULL -> SearchResponse(null,listOf())
+            DISCONNECT_NETWORK -> throw IOException(DISCONNECT_NETWORK)
+            else -> getSearchResponse()
         }
-    }
 
-    private fun getSearchResponse(): SearchResponse {
+    internal fun getSearchResponse(): SearchResponse {
         val list: MutableList<SearchResult> = mutableListOf()
         for (index in 1..100) {
             list.add(

@@ -1,6 +1,7 @@
 package com.example.searchgithub.di.modules
 
 import com.example.searchgithub.repository.GitHubApi
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
@@ -15,6 +16,7 @@ class GitHubApiModule {
     fun gitHubApi(): GitHubApi = Retrofit.Builder()
         .baseUrl(BASE_URL)
         .addConverterFactory(GsonConverterFactory.create())
+        .addCallAdapterFactory(CoroutineCallAdapterFactory())
         .build()
         .create(GitHubApi::class.java)
 

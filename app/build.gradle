@@ -82,8 +82,11 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    //Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava3:2.9.0'
+    implementation 'com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2'
     //Mockito
     testImplementation "org.mockito:mockito-core:5.4.0"
     testImplementation 'org.mockito:mockito-inline:2.8.9'
@@ -99,6 +102,8 @@ dependencies {
     testImplementation 'androidx.test.espresso:espresso-intents:3.5.1'
     debugImplementation 'androidx.fragment:fragment-testing:1.6.0'
     debugImplementation 'androidx.test.espresso:espresso-contrib:3.5.1'
+    testImplementation 'androidx.arch.core:core-testing:2.2.0'
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.4.3'
     //Robolectric
     testImplementation 'org.robolectric:robolectric:4.10.3'
     //Dagger2
@@ -106,6 +111,10 @@ dependencies {
     implementation 'com.google.dagger:dagger-android-support:2.46'
     kapt 'com.google.dagger:dagger-android-processor:2.46'
     kapt 'com.google.dagger:dagger-compiler:2.46'
+    //RxJava
+    implementation 'io.reactivex.rxjava3:rxjava:3.1.6'
+    implementation 'io.reactivex.rxjava3:rxandroid:3.0.2'
+    implementation 'io.reactivex.rxjava3:rxkotlin:3.0.1'
     //UI Automator
     androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
 }

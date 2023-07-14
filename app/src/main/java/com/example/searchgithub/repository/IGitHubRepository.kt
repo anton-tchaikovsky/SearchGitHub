@@ -1,8 +1,9 @@
 package com.example.searchgithub.repository
 
+import com.example.searchgithub.model.SearchResponse
+
 interface IGitHubRepository {
-    fun searchGithub(
-        query: String,
-        callback: GitHubRepositoryCallback
-    )
+    suspend fun searchGithub(
+        query: String
+    ): SearchResponse
 }
