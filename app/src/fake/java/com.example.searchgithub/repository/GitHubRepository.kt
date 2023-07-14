@@ -1,9 +1,10 @@
 package com.example.searchgithub.repository
 
-import com.example.searchgithub.App
 import com.example.searchgithub.model.SearchResponse
+import com.example.searchgithub.model.SearchResult
 import retrofit2.Response
 import javax.inject.Inject
+import kotlin.random.Random
 
 class GitHubRepository @Inject constructor(@Suppress("unused") private val gitHubApi: GitHubApi) : IGitHubRepository {
 
@@ -34,13 +35,33 @@ class GitHubRepository @Inject constructor(@Suppress("unused") private val gitHu
             DISCONNECT_NETWORK -> callback.handleGitHubError()
             else -> callback.handleGitHubResponse(
                 Response.success(
-                    SearchResponse(
-                        TOTAL_COUNT,
-                        listOf()
-                    )
+                    getSearchResponse()
                 )
             )
         }
+    }
+
+    private fun getSearchResponse(): SearchResponse {
+        val list: MutableList<SearchResult> = mutableListOf()
+        for (index in 1..100) {
+            list.add(
+                SearchResult(
+                    id = index,
+                    name = "Name: $index",
+                    fullName = "FullName: $index",
+                    private = Random.nextBoolean(),
+                    description = "Description: $index",
+                    updatedAt = "Updated: $index",
+                    size = index,
+                    stargazersCount = Random.nextInt(100),
+                    language = "",
+                    hasWiki = Random.nextBoolean(),
+                    archived = Random.nextBoolean(),
+                    score = index.toDouble()
+                )
+            )
+        }
+        return SearchResponse(list.size, list)
     }
 
     companion object {

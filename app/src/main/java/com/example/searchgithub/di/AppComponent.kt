@@ -5,7 +5,7 @@ import com.example.searchgithub.App
 import com.example.searchgithub.di.modules.GitHubApiModule
 import com.example.searchgithub.di.modules.PresenterModule
 import com.example.searchgithub.di.modules.RepositoryModule
-import com.example.searchgithub.view.details.DetailsActivity
+import com.example.searchgithub.view.details.DetailsFragment
 import com.example.searchgithub.view.search.MainActivity
 import dagger.BindsInstance
 import dagger.Component
@@ -32,6 +32,6 @@ interface AppComponent {
 
     fun inject(app: App)
     fun inject(mainActivity: MainActivity)
-    fun inject(detailsActivity: DetailsActivity)
+    fun inject(detailsFragment: DetailsFragment)
 
 }

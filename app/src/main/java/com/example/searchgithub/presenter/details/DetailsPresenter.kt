@@ -3,7 +3,7 @@ package com.example.searchgithub.presenter.details
 import com.example.searchgithub.view.details.ViewDetailsContract
 
 internal class DetailsPresenter internal constructor(
-    internal var count: Int = 0
+    override var count: Int = 0
 ) : PresenterDetailsContract {
 
     internal var viewContract: ViewDetailsContract? = null
