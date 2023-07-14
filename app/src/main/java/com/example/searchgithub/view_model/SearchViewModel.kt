@@ -3,40 +3,42 @@ package com.example.searchgithub.view_model
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.githubusers.scheduler_provider.ISchedulerProvider
 import com.example.searchgithub.model.AppState
 import com.example.searchgithub.model.SearchResponse
 import com.example.searchgithub.repository.IGitHubRepository
-import io.reactivex.rxjava3.disposables.CompositeDisposable
-import io.reactivex.rxjava3.kotlin.subscribeBy
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.launch
 import java.io.IOException
 
 class SearchViewModel(
-    private val repository: IGitHubRepository,
-    private val schedulerProvider: ISchedulerProvider
+    private val repository: IGitHubRepository
 ) : ViewModel() {
 
     private val liveData: MutableLiveData<AppState> = MutableLiveData()
-    private val compositeDisposable = CompositeDisposable()
+
+    private val viewModelCoroutineScope = CoroutineScope(
+        Dispatchers.Main
+                + SupervisorJob()
+                + CoroutineExceptionHandler { _, throwable ->
+            handleGitHubError(throwable)
+        })
+
+    override fun onCleared() {
+        super.onCleared()
+        viewModelCoroutineScope.coroutineContext.cancelChildren()
+    }
 
     fun getLiveData(): LiveData<AppState> = liveData
 
     fun searchGitHub(searchQuery: String) {
-        compositeDisposable.add(repository.searchGithub(searchQuery)
-            .subscribeOn(schedulerProvider.ioScheduler())
-            .observeOn(schedulerProvider.mainScheduler())
-            .doOnSubscribe {
-                liveData.value = AppState.Loading
-            }
-            .subscribeBy(
-                onSuccess = {
-                    handleGitHubResponse(it)
-                },
-                onError = {
-                    handleGitHubError(it)
-                }
-            )
-        )
+        liveData.value = AppState.Loading
+        viewModelCoroutineScope.launch {
+            handleGitHubResponse(repository.searchGithub(searchQuery))
+        }
     }
 
     private fun handleGitHubResponse(searchResponse: SearchResponse) {

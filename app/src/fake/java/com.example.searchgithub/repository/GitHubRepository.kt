@@ -2,7 +2,6 @@ package com.example.searchgithub.repository
 
 import com.example.searchgithub.model.SearchResponse
 import com.example.searchgithub.model.SearchResult
-import io.reactivex.rxjava3.core.Single
 import java.io.IOException
 import javax.inject.Inject
 import kotlin.random.Random
@@ -10,29 +9,13 @@ import kotlin.random.Random
 class GitHubRepository @Inject constructor(@Suppress("unused") private val gitHubApi: GitHubApi) :
     IGitHubRepository {
 
-    override fun searchGithub(query: String): Single<SearchResponse> =
-        Single.create {
-            when (query) {
-                RESPONSE_IS_NULL -> it.onError(IOException(RESPONSE_IS_NULL))
-                SEARCH_RESULT_IS_NULL -> it.onSuccess(
-                    SearchResponse(
-                        TOTAL_COUNT,
-                        null
-                    )
-                )
-
-                TOTAL_COUNT_IS_NULL -> it.onSuccess(
-                    SearchResponse(
-                        null,
-                        listOf()
-                    )
-                )
-
-                DISCONNECT_NETWORK -> it.onError(IOException(DISCONNECT_NETWORK))
-                else -> it.onSuccess(
-                    getSearchResponse()
-                )
-            }
+    override suspend fun searchGithub(query: String): SearchResponse =
+        when (query) {
+            RESPONSE_IS_NULL -> throw IOException(RESPONSE_IS_NULL)
+            SEARCH_RESULT_IS_NULL -> SearchResponse(TOTAL_COUNT, null)
+            TOTAL_COUNT_IS_NULL -> SearchResponse(null,listOf())
+            DISCONNECT_NETWORK -> throw IOException(DISCONNECT_NETWORK)
+            else -> getSearchResponse()
         }
 
     internal fun getSearchResponse(): SearchResponse {
